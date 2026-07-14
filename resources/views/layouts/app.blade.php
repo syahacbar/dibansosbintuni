@@ -37,6 +37,28 @@
                     >
                         Dashboard
                     </a>
+
+                    <div class="pt-4">
+                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
+                        <div class="mt-2 space-y-1">
+                            @foreach ([
+                                'master-data.periode-bansos.index' => 'Periode Bansos',
+                                'master-data.jenis-bantuan.index' => 'Jenis Bantuan',
+                                'master-data.perguruan-tinggi.index' => 'Perguruan Tinggi',
+                                'master-data.fakultas.index' => 'Fakultas',
+                                'master-data.program-studi.index' => 'Program Studi',
+                                'master-data.distrik.index' => 'Distrik',
+                                'master-data.kampung.index' => 'Kampung',
+                            ] as $route => $label)
+                                <a
+                                    href="{{ route($route) }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    {{ $label }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
                 </nav>
             </aside>
 
