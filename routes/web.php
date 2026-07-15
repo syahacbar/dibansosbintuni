@@ -11,6 +11,7 @@ use App\Http\Controllers\MasterData\KampungController;
 use App\Http\Controllers\MasterData\PerguruanTinggiController;
 use App\Http\Controllers\MasterData\PeriodeBansosController;
 use App\Http\Controllers\MasterData\ProgramStudiController;
+use App\Http\Controllers\Monitoring\DashboardController as MonitoringDashboardController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\Operator\PengajuanController as OperatorPengajuanController;
 use App\Http\Controllers\ProfileController;
@@ -58,6 +59,8 @@ Route::middleware('auth')->group(function () {
         Route::get('settings', [SuperAdminSystemSettingController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [SuperAdminSystemSettingController::class, 'update'])->name('settings.update');
     });
+
+    Route::get('monitoring/dashboard', MonitoringDashboardController::class)->name('monitoring.dashboard');
 
     Route::prefix('master-data')->name('master-data.')->group(function () {
         Route::resource('periode-bansos', PeriodeBansosController::class)->parameters(['periode-bansos' => 'periodeBansos']);
