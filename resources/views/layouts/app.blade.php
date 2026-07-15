@@ -18,6 +18,10 @@
         @php
             $pageTitle = isset($header) ? trim(strip_tags((string) $header)) : 'Dashboard';
             $logoPath = \App\Models\SystemSetting::where('key', 'logo_path')->value('value');
+            $currentUser = Auth::user();
+            $isSuperAdmin = $currentUser?->hasRole('Super Admin') ?? false;
+            $isOperator = $currentUser?->hasRole('Operator') ?? false;
+            $isMahasiswa = ($currentUser?->hasRole('Mahasiswa') ?? false) || (! $isSuperAdmin && ! $isOperator);
         @endphp
 
         <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-100 text-slate-900">
@@ -44,118 +48,124 @@
                         Dashboard
                     </a>
 
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Mahasiswa</p>
-                        <div class="mt-2 space-y-1">
-                            <a
-                                href="{{ route('dashboard') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Dashboard Mahasiswa
-                            </a>
-                            <a
-                                href="{{ route('mahasiswa.profile.edit') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Profil
-                            </a>
-                            <a
-                                href="{{ route('mahasiswa.documents.index') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.documents.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Upload Dokumen
-                            </a>
-                            <a
-                                href="{{ route('mahasiswa.pengajuan.index') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Pengajuan Bantuan
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Operator</p>
-                        <div class="mt-2 space-y-1">
-                            <a
-                                href="{{ route('operator.dashboard') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Dashboard Operator
-                            </a>
-                            <a
-                                href="{{ route('operator.pengajuan.index') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Daftar Pengajuan
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Super Admin</p>
-                        <div class="mt-2 space-y-1">
-                            @foreach ([
-                                'super-admin.users.index' => 'User',
-                                'super-admin.roles.index' => 'Role',
-                                'super-admin.permissions.index' => 'Permission',
-                                'super-admin.settings.edit' => 'Pengaturan Sistem',
-                            ] as $route => $label)
+                    @if ($isMahasiswa)
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Mahasiswa</p>
+                            <div class="mt-2 space-y-1">
                                 <a
-                                    href="{{ route($route) }}"
-                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') || request()->routeIs($route) ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                    href="{{ route('dashboard') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
                                 >
-                                    {{ $label }}
+                                    Dashboard Mahasiswa
                                 </a>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Monitoring</p>
-                        <div class="mt-2 space-y-1">
-                            <a
-                                href="{{ route('monitoring.dashboard') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('monitoring.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Dashboard Monitoring
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Report</p>
-                        <div class="mt-2 space-y-1">
-                            <a
-                                href="{{ route('reports.index') }}"
-                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('reports.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
-                            >
-                                Laporan
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
-                        <div class="mt-2 space-y-1">
-                            @foreach ([
-                                'master-data.periode-bansos.index' => 'Periode Bansos',
-                                'master-data.jenis-bantuan.index' => 'Jenis Bantuan',
-                                'master-data.perguruan-tinggi.index' => 'Perguruan Tinggi',
-                                'master-data.fakultas.index' => 'Fakultas',
-                                'master-data.program-studi.index' => 'Program Studi',
-                                'master-data.distrik.index' => 'Distrik',
-                                'master-data.kampung.index' => 'Kampung',
-                            ] as $route => $label)
                                 <a
-                                    href="{{ route($route) }}"
-                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                    href="{{ route('mahasiswa.profile.edit') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
                                 >
-                                    {{ $label }}
+                                    Profil
                                 </a>
-                            @endforeach
+                                <a
+                                    href="{{ route('mahasiswa.documents.index') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.documents.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Upload Dokumen
+                                </a>
+                                <a
+                                    href="{{ route('mahasiswa.pengajuan.index') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Pengajuan Bantuan
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
+
+                    @if ($isOperator)
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Operator</p>
+                            <div class="mt-2 space-y-1">
+                                <a
+                                    href="{{ route('operator.dashboard') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Dashboard Operator
+                                </a>
+                                <a
+                                    href="{{ route('operator.pengajuan.index') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Daftar Pengajuan
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if ($isSuperAdmin)
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Super Admin</p>
+                            <div class="mt-2 space-y-1">
+                                @foreach ([
+                                    'super-admin.users.index' => 'User',
+                                    'super-admin.roles.index' => 'Role',
+                                    'super-admin.permissions.index' => 'Permission',
+                                    'super-admin.settings.edit' => 'Pengaturan Sistem',
+                                ] as $route => $label)
+                                    <a
+                                        href="{{ route($route) }}"
+                                        class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') || request()->routeIs($route) ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                    >
+                                        {{ $label }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Monitoring</p>
+                            <div class="mt-2 space-y-1">
+                                <a
+                                    href="{{ route('monitoring.dashboard') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('monitoring.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Dashboard Monitoring
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Report</p>
+                            <div class="mt-2 space-y-1">
+                                <a
+                                    href="{{ route('reports.index') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('reports.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Laporan
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
+                            <div class="mt-2 space-y-1">
+                                @foreach ([
+                                    'master-data.periode-bansos.index' => 'Periode Bansos',
+                                    'master-data.jenis-bantuan.index' => 'Jenis Bantuan',
+                                    'master-data.perguruan-tinggi.index' => 'Perguruan Tinggi',
+                                    'master-data.fakultas.index' => 'Fakultas',
+                                    'master-data.program-studi.index' => 'Program Studi',
+                                    'master-data.distrik.index' => 'Distrik',
+                                    'master-data.kampung.index' => 'Kampung',
+                                ] as $route => $label)
+                                    <a
+                                        href="{{ route($route) }}"
+                                        class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                    >
+                                        {{ $label }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </nav>
             </aside>
 
