@@ -76,8 +76,7 @@ class OperatorDashboardTest extends TestCase
             ->assertOk()
             ->assertSee('Detail Pengajuan')
             ->assertSee('Preview Dokumen')
-            ->assertSee('ktp.jpg')
-            ->assertDontSee('Verifikasi');
+            ->assertSee('ktp.jpg');
     }
 
     public function test_operator_routes_are_read_only(): void

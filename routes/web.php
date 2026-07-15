@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
         Route::get('dashboard', OperatorDashboardController::class)->name('dashboard');
         Route::get('pengajuan', [OperatorPengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('pengajuan/{pengajuan}', [OperatorPengajuanController::class, 'show'])->name('pengajuan.show');
+        Route::post('pengajuan/{pengajuan}/verify', [OperatorPengajuanController::class, 'verify'])->name('pengajuan.verify');
     });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {

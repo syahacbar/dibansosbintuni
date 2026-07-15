@@ -15,7 +15,11 @@ class Pengajuan extends Model
         'jenis_bantuan_id',
         'nomor_pengajuan',
         'status',
+        'verification_score',
         'catatan',
+        'verification_notes',
+        'verified_by',
+        'verified_at',
         'submitted_at',
     ];
 
@@ -23,7 +27,9 @@ class Pengajuan extends Model
     {
         return [
             'status' => PengajuanStatus::class,
+            'verification_score' => 'integer',
             'submitted_at' => 'datetime',
+            'verified_at' => 'datetime',
         ];
     }
 
@@ -47,8 +53,23 @@ class Pengajuan extends Model
         return $this->hasMany(PengajuanTimeline::class)->orderBy('occurred_at');
     }
 
+    public function verifications(): HasMany
+    {
+        return $this->hasMany(PengajuanVerification::class)->latest('verified_at');
+    }
+
+    public function verifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
     public function isDraft(): bool
     {
         return $this->status === PengajuanStatus::Draft;
+    }
+
+    public function canBeVerified(): bool
+    {
+        return $this->status === PengajuanStatus::Diajukan;
     }
 }

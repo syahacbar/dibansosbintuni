@@ -53,6 +53,8 @@ class OperatorPengajuanService
             'periodeBansos',
             'jenisBantuan',
             'timelines',
+            'verifications.operator',
+            'verifier',
         ]);
     }
 
