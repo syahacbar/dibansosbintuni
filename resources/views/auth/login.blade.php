@@ -2,6 +2,52 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <div
+        class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4"
+        x-data="{
+            accounts: [
+                { role: 'Super Admin', email: 'admin@example.com', access: 'User, Role, Permission, Pengaturan Sistem, Monitoring, Report' },
+                { role: 'Operator', email: 'operator@example.com', access: 'Dashboard Operator, Pengajuan, Preview Dokumen, Verifikasi' },
+                { role: 'Mahasiswa', email: 'mahasiswa@example.com', access: 'Dashboard Mahasiswa, Profil, Dokumen, Pengajuan' },
+            ],
+            useAccount(email) {
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = 'password';
+            },
+        }"
+    >
+        <div class="mb-3">
+            <h2 class="text-sm font-semibold text-slate-950">Akun Demo</h2>
+            <p class="mt-1 text-xs leading-5 text-slate-600">
+                Klik gunakan untuk mengisi form login secara otomatis. Password semua akun:
+                <span class="font-semibold text-slate-900">password</span>
+            </p>
+        </div>
+
+        <div class="space-y-3">
+            <template x-for="account in accounts" :key="account.email">
+                <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-slate-900" x-text="account.role"></p>
+                            <p class="mt-1 break-all text-xs text-slate-600" x-text="account.email"></p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="shrink-0 rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                            x-on:click="useAccount(account.email)"
+                        >
+                            Gunakan
+                        </button>
+                    </div>
+
+                    <p class="mt-2 text-xs leading-5 text-slate-500" x-text="account.access"></p>
+                </div>
+            </template>
+        </div>
+    </div>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
