@@ -17,16 +17,22 @@
     <body class="font-sans antialiased">
         @php
             $pageTitle = isset($header) ? trim(strip_tags((string) $header)) : 'Dashboard';
+            $logoPath = \App\Models\SystemSetting::where('key', 'logo_path')->value('value');
         @endphp
 
         <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-100 text-slate-900">
             <aside
-                class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full border-r border-slate-200 bg-white transition-transform duration-200 lg:translate-x-0"
+                class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full overflow-y-auto border-r border-slate-200 bg-white transition-transform duration-200 lg:translate-x-0"
                 :class="{ 'translate-x-0': sidebarOpen }"
             >
                 <div class="flex h-16 items-center border-b border-slate-200 px-6">
-                    <a href="{{ route('dashboard') }}" class="text-lg font-semibold text-slate-950">
-                        SIBANSOS Mahasiswa
+                    <a href="{{ route('dashboard') }}" class="flex min-w-0 items-center gap-3 text-lg font-semibold text-slate-950">
+                        @if ($logoPath)
+                            <img src="{{ Storage::disk('public')->url($logoPath) }}" alt="Logo" class="h-9 w-9 shrink-0 rounded-md border border-slate-200 object-contain">
+                        @else
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-900 text-sm font-semibold text-white">SB</span>
+                        @endif
+                        <span class="truncate">SIBANSOS Mahasiswa</span>
                     </a>
                 </div>
 

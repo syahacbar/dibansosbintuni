@@ -77,5 +77,7 @@ class DatabaseSeeder extends Seeder
             ['key' => 'active_year'],
             ['value' => (string) now()->year],
         );
+
+        $this->call(DemoDataSeeder::class);
     }
 }
