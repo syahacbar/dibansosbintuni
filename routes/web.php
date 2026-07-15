@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Mahasiswa\DocumentController as MahasiswaDocumentController;
+use App\Http\Controllers\Mahasiswa\PengajuanController as MahasiswaPengajuanController;
 use App\Http\Controllers\Mahasiswa\ProfileController as MahasiswaProfileController;
 use App\Http\Controllers\MasterData\DistrikController;
 use App\Http\Controllers\MasterData\FakultasController;
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('dokumen/{documentType}', [MahasiswaDocumentController::class, 'destroy'])
             ->whereIn('documentType', ['ktp', 'kk', 'ktm', 'surat_aktif', 'khs', 'buku_rekening'])
             ->name('documents.destroy');
+
+        Route::post('pengajuan/{pengajuan}/submit', [MahasiswaPengajuanController::class, 'submit'])->name('pengajuan.submit');
+        Route::resource('pengajuan', MahasiswaPengajuanController::class)->except('destroy');
     });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {

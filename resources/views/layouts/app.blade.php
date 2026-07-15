@@ -53,6 +53,12 @@
                             >
                                 Upload Dokumen
                             </a>
+                            <a
+                                href="{{ route('mahasiswa.pengajuan.index') }}"
+                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('mahasiswa.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                            >
+                                Pengajuan Bantuan
+                            </a>
                         </div>
                     </div>
 
