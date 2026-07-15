@@ -15,6 +15,7 @@ use App\Http\Controllers\Monitoring\DashboardController as MonitoringDashboardCo
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\Operator\PengajuanController as OperatorPengajuanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\SuperAdmin\PermissionController as SuperAdminPermissionController;
 use App\Http\Controllers\SuperAdmin\RoleController as SuperAdminRoleController;
 use App\Http\Controllers\SuperAdmin\SystemSettingController as SuperAdminSystemSettingController;
@@ -61,6 +62,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('monitoring/dashboard', MonitoringDashboardController::class)->name('monitoring.dashboard');
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('{type}/pdf', [ReportController::class, 'pdf'])->name('pdf');
+        Route::get('{type}/excel', [ReportController::class, 'excel'])->name('excel');
+    });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {
         Route::resource('periode-bansos', PeriodeBansosController::class)->parameters(['periode-bansos' => 'periodeBansos']);

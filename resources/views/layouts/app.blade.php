@@ -118,6 +118,18 @@
                     </div>
 
                     <div class="pt-4">
+                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Report</p>
+                        <div class="mt-2 space-y-1">
+                            <a
+                                href="{{ route('reports.index') }}"
+                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('reports.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                            >
+                                Laporan
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
                         <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
                         <div class="mt-2 space-y-1">
                             @foreach ([
