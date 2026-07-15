@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\Mahasiswa\DocumentController as MahasiswaDocumentController;
 use App\Http\Controllers\Mahasiswa\PengajuanController as MahasiswaPengajuanController;
 use App\Http\Controllers\Mahasiswa\ProfileController as MahasiswaProfileController;
@@ -19,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', MahasiswaDashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

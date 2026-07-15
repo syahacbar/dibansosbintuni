@@ -7,7 +7,7 @@
         <div class="max-w-3xl">
             <h1 class="text-xl font-semibold text-slate-950">Dashboard</h1>
             <p class="mt-2 text-sm text-slate-600">
-                Pondasi SIBANSOS Mahasiswa Kabupaten Teluk Bintuni siap digunakan untuk sprint berikutnya.
+                Gunakan menu Dashboard Mahasiswa untuk memantau pengajuan bantuan.
             </p>
         </div>
     </section>
