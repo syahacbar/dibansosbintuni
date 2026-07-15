@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Mahasiswa\DocumentController as MahasiswaDocumentController;
+use App\Http\Controllers\Mahasiswa\ProfileController as MahasiswaProfileController;
 use App\Http\Controllers\MasterData\DistrikController;
 use App\Http\Controllers\MasterData\FakultasController;
 use App\Http\Controllers\MasterData\JenisBantuanController;
@@ -22,6 +24,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+        Route::get('profil', [MahasiswaProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profil', [MahasiswaProfileController::class, 'update'])->name('profile.update');
+        Route::get('dokumen', [MahasiswaDocumentController::class, 'index'])->name('documents.index');
+        Route::post('dokumen', [MahasiswaDocumentController::class, 'store'])->name('documents.store');
+        Route::delete('dokumen/{documentType}', [MahasiswaDocumentController::class, 'destroy'])
+            ->whereIn('documentType', ['ktp', 'kk', 'ktm', 'surat_aktif', 'khs', 'buku_rekening'])
+            ->name('documents.destroy');
+    });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {
         Route::resource('periode-bansos', PeriodeBansosController::class)->parameters(['periode-bansos' => 'periodeBansos']);
