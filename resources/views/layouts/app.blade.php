@@ -87,6 +87,25 @@
                     </div>
 
                     <div class="pt-4">
+                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Super Admin</p>
+                        <div class="mt-2 space-y-1">
+                            @foreach ([
+                                'super-admin.users.index' => 'User',
+                                'super-admin.roles.index' => 'Role',
+                                'super-admin.permissions.index' => 'Permission',
+                                'super-admin.settings.edit' => 'Pengaturan Sistem',
+                            ] as $route => $label)
+                                <a
+                                    href="{{ route($route) }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs(Str::beforeLast($route, '.index').'.*') || request()->routeIs($route) ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    {{ $label }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
                         <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
                         <div class="mt-2 space-y-1">
                             @foreach ([

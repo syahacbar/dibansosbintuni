@@ -14,6 +14,10 @@ use App\Http\Controllers\MasterData\ProgramStudiController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\Operator\PengajuanController as OperatorPengajuanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SuperAdmin\PermissionController as SuperAdminPermissionController;
+use App\Http\Controllers\SuperAdmin\RoleController as SuperAdminRoleController;
+use App\Http\Controllers\SuperAdmin\SystemSettingController as SuperAdminSystemSettingController;
+use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,6 +49,14 @@ Route::middleware('auth')->group(function () {
         Route::get('pengajuan', [OperatorPengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('pengajuan/{pengajuan}', [OperatorPengajuanController::class, 'show'])->name('pengajuan.show');
         Route::post('pengajuan/{pengajuan}/verify', [OperatorPengajuanController::class, 'verify'])->name('pengajuan.verify');
+    });
+
+    Route::prefix('super-admin')->name('super-admin.')->group(function () {
+        Route::resource('users', SuperAdminUserController::class);
+        Route::resource('roles', SuperAdminRoleController::class);
+        Route::resource('permissions', SuperAdminPermissionController::class);
+        Route::get('settings', [SuperAdminSystemSettingController::class, 'edit'])->name('settings.edit');
+        Route::put('settings', [SuperAdminSystemSettingController::class, 'update'])->name('settings.update');
     });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {

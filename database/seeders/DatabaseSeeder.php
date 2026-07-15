@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -23,9 +25,22 @@ class DatabaseSeeder extends Seeder
             'Mahasiswa',
         ];
 
+        $permissions = [
+            'manage users',
+            'manage roles',
+            'manage permissions',
+            'manage settings',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
+
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
+
+        Role::where('name', 'Super Admin')->first()?->syncPermissions($permissions);
 
         $users = [
             [
@@ -57,5 +72,10 @@ class DatabaseSeeder extends Seeder
 
             $user->syncRoles($userData['role']);
         }
+
+        SystemSetting::updateOrCreate(
+            ['key' => 'active_year'],
+            ['value' => (string) now()->year],
+        );
     }
 }
