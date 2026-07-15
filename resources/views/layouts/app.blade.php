@@ -63,6 +63,24 @@
                     </div>
 
                     <div class="pt-4">
+                        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Operator</p>
+                        <div class="mt-2 space-y-1">
+                            <a
+                                href="{{ route('operator.dashboard') }}"
+                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                            >
+                                Dashboard Operator
+                            </a>
+                            <a
+                                href="{{ route('operator.pengajuan.index') }}"
+                                class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                            >
+                                Daftar Pengajuan
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
                         <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Master Data</p>
                         <div class="mt-2 space-y-1">
                             @foreach ([

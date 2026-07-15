@@ -10,6 +10,8 @@ use App\Http\Controllers\MasterData\KampungController;
 use App\Http\Controllers\MasterData\PerguruanTinggiController;
 use App\Http\Controllers\MasterData\PeriodeBansosController;
 use App\Http\Controllers\MasterData\ProgramStudiController;
+use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
+use App\Http\Controllers\Operator\PengajuanController as OperatorPengajuanController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +39,12 @@ Route::middleware('auth')->group(function () {
 
         Route::post('pengajuan/{pengajuan}/submit', [MahasiswaPengajuanController::class, 'submit'])->name('pengajuan.submit');
         Route::resource('pengajuan', MahasiswaPengajuanController::class)->except('destroy');
+    });
+
+    Route::prefix('operator')->name('operator.')->group(function () {
+        Route::get('dashboard', OperatorDashboardController::class)->name('dashboard');
+        Route::get('pengajuan', [OperatorPengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::get('pengajuan/{pengajuan}', [OperatorPengajuanController::class, 'show'])->name('pengajuan.show');
     });
 
     Route::prefix('master-data')->name('master-data.')->group(function () {
