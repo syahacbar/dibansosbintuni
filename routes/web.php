@@ -22,6 +22,8 @@ use App\Http\Controllers\SuperAdmin\SystemSettingController as SuperAdminSystemS
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', fn () => response()->json(['status' => 'ok']))->name('health');
+
 Route::get('/', function () {
     return auth()->check()
         ? redirect()->route('dashboard')
