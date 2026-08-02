@@ -155,4 +155,17 @@ class DemoDeploymentTest extends TestCase
         $this->assertGuest();
         $logoutResponse->assertRedirect(route('login'));
     }
+
+    public function test_login_page_renders_system_setting_logo(): void
+    {
+        \App\Models\SystemSetting::updateOrCreate(
+            ['key' => 'logo_path'],
+            ['value' => 'settings/custom_logo.png']
+        );
+
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('storage/settings/custom_logo.png');
+    }
 }
