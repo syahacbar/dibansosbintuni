@@ -67,9 +67,37 @@ class MahasiswaPengajuanTest extends TestCase
             ])
             ->assertRedirect(route('mahasiswa.pengajuan.show', $pengajuan));
 
+        // Submit without prerequisites should redirect back with error
         $this->actingAs($user)
             ->post(route('mahasiswa.pengajuan.submit', $pengajuan))
-            ->assertRedirect(route('mahasiswa.pengajuan.show', $pengajuan));
+            ->assertRedirect(route('mahasiswa.pengajuan.show', $pengajuan))
+            ->assertSessionHas('error');
+
+        // Create profile and upload 6 documents
+        \App\Models\MahasiswaProfile::create([
+            'user_id' => $user->id,
+            'nik' => '9104010101010099',
+            'nim' => '20269999',
+            'nama_lengkap' => $user->name,
+            'nama_bank' => 'Bank Papua',
+            'nomor_rekening' => '1234567890',
+        ]);
+
+        foreach (\App\Enums\StudentDocumentType::cases() as $type) {
+            \App\Models\MahasiswaDocument::create([
+                'user_id' => $user->id,
+                'document_type' => $type->value,
+                'file_path' => 'dummy/'.$type->value.'.txt',
+                'original_name' => $type->value.'.txt',
+                'mime_type' => 'text/plain',
+                'file_size' => 100,
+            ]);
+        }
+
+        $this->actingAs($user)
+            ->post(route('mahasiswa.pengajuan.submit', $pengajuan))
+            ->assertRedirect(route('mahasiswa.pengajuan.show', $pengajuan))
+            ->assertSessionHas('success');
 
         $pengajuan->refresh();
 
@@ -79,6 +107,65 @@ class MahasiswaPengajuanTest extends TestCase
             'pengajuan_id' => $pengajuan->id,
             'status' => PengajuanStatus::Diajukan->value,
         ]);
+    }
+
+    public function test_student_can_resubmit_revisi_pengajuan(): void
+    {
+        $user = User::factory()->create();
+        $periode = PeriodeBansos::create([
+            'kode' => 'PB-2026-REV',
+            'nama' => 'Periode 2026',
+            'tanggal_mulai' => '2026-01-01',
+            'tanggal_selesai' => '2026-12-31',
+            'aktif' => true,
+        ]);
+        $jenisBantuan = JenisBantuan::create([
+            'kode' => 'UKT-REV',
+            'nama' => 'Bantuan UKT',
+            'aktif' => true,
+        ]);
+
+        \App\Models\MahasiswaProfile::create([
+            'user_id' => $user->id,
+            'nik' => '9104010101010098',
+            'nim' => '20269998',
+            'nama_lengkap' => $user->name,
+            'nama_bank' => 'Bank Papua',
+            'nomor_rekening' => '1234567890',
+        ]);
+
+        foreach (\App\Enums\StudentDocumentType::cases() as $type) {
+            \App\Models\MahasiswaDocument::create([
+                'user_id' => $user->id,
+                'document_type' => $type->value,
+                'file_path' => 'dummy/'.$type->value.'.txt',
+                'original_name' => $type->value.'.txt',
+                'mime_type' => 'text/plain',
+                'file_size' => 100,
+            ]);
+        }
+
+        $pengajuan = Pengajuan::create([
+            'user_id' => $user->id,
+            'periode_bansos_id' => $periode->id,
+            'jenis_bantuan_id' => $jenisBantuan->id,
+            'nomor_pengajuan' => 'PGJ-REV-001',
+            'status' => PengajuanStatus::Revisi,
+            'verification_notes' => 'Tolong perbarui KHS',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('mahasiswa.pengajuan.edit', $pengajuan))
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->post(route('mahasiswa.pengajuan.submit', $pengajuan))
+            ->assertRedirect(route('mahasiswa.pengajuan.show', $pengajuan))
+            ->assertSessionHas('success');
+
+        $pengajuan->refresh();
+
+        $this->assertSame(PengajuanStatus::Diajukan, $pengajuan->status);
     }
 
     public function test_student_cannot_access_other_student_pengajuan(): void

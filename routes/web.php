@@ -51,8 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('operator')->name('operator.')->group(function () {
         Route::get('dashboard', OperatorDashboardController::class)->name('dashboard');
         Route::get('pengajuan', [OperatorPengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::get('penerima', [OperatorPengajuanController::class, 'penerima'])->name('penerima.index');
         Route::get('pengajuan/{pengajuan}', [OperatorPengajuanController::class, 'show'])->name('pengajuan.show');
         Route::post('pengajuan/{pengajuan}/verify', [OperatorPengajuanController::class, 'verify'])->name('pengajuan.verify');
+        Route::post('pengajuan/{pengajuan}/salurkan', [OperatorPengajuanController::class, 'salurkan'])->name('pengajuan.salurkan');
     });
 
     Route::prefix('super-admin')->name('super-admin.')->group(function () {

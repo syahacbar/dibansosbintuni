@@ -21,6 +21,9 @@ class Pengajuan extends Model
         'verified_by',
         'verified_at',
         'submitted_at',
+        'disalurkan_at',
+        'nomor_sp2d',
+        'catatan_penyaluran',
     ];
 
     protected function casts(): array
@@ -30,6 +33,7 @@ class Pengajuan extends Model
             'verification_score' => 'integer',
             'submitted_at' => 'datetime',
             'verified_at' => 'datetime',
+            'disalurkan_at' => 'datetime',
         ];
     }
 
@@ -68,8 +72,28 @@ class Pengajuan extends Model
         return $this->status === PengajuanStatus::Draft;
     }
 
+    public function isRevisi(): bool
+    {
+        return $this->status === PengajuanStatus::Revisi;
+    }
+
+    public function canBeEdited(): bool
+    {
+        return in_array($this->status, [PengajuanStatus::Draft, PengajuanStatus::Revisi], true);
+    }
+
+    public function canBeSubmitted(): bool
+    {
+        return in_array($this->status, [PengajuanStatus::Draft, PengajuanStatus::Revisi], true);
+    }
+
     public function canBeVerified(): bool
     {
         return $this->status === PengajuanStatus::Diajukan;
+    }
+
+    public function canBeDisalurkan(): bool
+    {
+        return $this->status === PengajuanStatus::Disetujui;
     }
 }

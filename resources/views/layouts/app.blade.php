@@ -34,9 +34,9 @@
                         @if ($logoPath)
                             <img src="{{ Storage::disk('public')->url($logoPath) }}" alt="Logo" class="h-9 w-9 shrink-0 rounded-md border border-slate-200 object-contain">
                         @else
-                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-900 text-sm font-semibold text-white">SB</span>
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-900 text-sm font-semibold text-white">DB</span>
                         @endif
-                        <span class="truncate">SIBANSOS Mahasiswa</span>
+                        <span class="truncate">DIBANSOS BINTUNI</span>
                     </a>
                 </div>
 
@@ -82,19 +82,25 @@
 
                     @if ($isOperator)
                         <div class="pt-4">
-                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Operator</p>
+                            <p class="px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Dinas Pendidikan</p>
                             <div class="mt-2 space-y-1">
                                 <a
                                     href="{{ route('operator.dashboard') }}"
                                     class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
                                 >
-                                    Dashboard Operator
+                                    Dashboard Verifikasi
                                 </a>
                                 <a
                                     href="{{ route('operator.pengajuan.index') }}"
                                     class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.pengajuan.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
                                 >
                                     Daftar Pengajuan
+                                </a>
+                                <a
+                                    href="{{ route('operator.penerima.index') }}"
+                                    class="flex items-center rounded-md px-3 py-2 text-sm font-medium {{ request()->routeIs('operator.penerima.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950' }}"
+                                >
+                                    Daftar Penerima Bantuan
                                 </a>
                             </div>
                         </div>
@@ -202,7 +208,7 @@
                         <div class="hidden sm:flex sm:items-center sm:gap-4">
                             <div class="text-right">
                                 <p class="text-sm font-medium text-slate-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-slate-500">{{ Auth::user()->roles->pluck('name')->join(', ') ?: 'User' }}</p>
+                                <p class="text-xs text-slate-500">{{ Auth::user()->roles->pluck('name')->map(fn ($r) => $r === 'Operator' ? 'Administrasi Dinas Pendidikan' : $r)->join(', ') ?: 'User' }}</p>
                             </div>
 
                             <x-dropdown align="right" width="48">
@@ -236,7 +242,7 @@
                 </main>
 
                 <footer class="border-t border-slate-200 bg-white px-4 py-4 text-sm text-slate-500 sm:px-6 lg:px-8">
-                    &copy; {{ date('Y') }} SIBANSOS Mahasiswa Kabupaten Teluk Bintuni
+                    &copy; {{ date('Y') }} DIBANSOS BINTUNI &mdash; Digitalisasi Bantuan Sosial Pendidikan Kabupaten Teluk Bintuni
                 </footer>
             </div>
         </div>

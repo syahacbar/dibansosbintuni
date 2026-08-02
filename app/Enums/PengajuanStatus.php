@@ -7,6 +7,7 @@ enum PengajuanStatus: string
     case Draft = 'draft';
     case Diajukan = 'diajukan';
     case Disetujui = 'disetujui';
+    case Disalurkan = 'disalurkan';
     case Revisi = 'revisi';
     case Ditolak = 'ditolak';
 
@@ -16,6 +17,7 @@ enum PengajuanStatus: string
             self::Draft => 'Draft',
             self::Diajukan => 'Diajukan',
             self::Disetujui => 'Disetujui',
+            self::Disalurkan => 'Disalurkan',
             self::Revisi => 'Revisi',
             self::Ditolak => 'Ditolak',
         };

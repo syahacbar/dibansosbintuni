@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">DIBANSOS BINTUNI</h1>
+        <p class="mt-1 text-xs font-medium text-slate-500">Digitalisasi Bantuan Sosial Pendidikan Kabupaten Teluk Bintuni</p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -7,7 +12,7 @@
         x-data="{
             accounts: [
                 { role: 'Super Admin', email: 'admin@example.com', access: 'User, Role, Permission, Pengaturan Sistem, Monitoring, Report' },
-                { role: 'Operator', email: 'operator@example.com', access: 'Dashboard Operator, Pengajuan, Preview Dokumen, Verifikasi' },
+                { role: 'Administrasi Dinas Pendidikan', email: 'operator@example.com', access: 'Dashboard Verifikasi, Pengajuan, Preview Dokumen, Verifikasi & Penyaluran' },
                 { role: 'Mahasiswa', email: 'mahasiswa@example.com', access: 'Dashboard Mahasiswa, Profil, Dokumen, Pengajuan' },
             ],
             useAccount(email) {

@@ -37,8 +37,9 @@ class RoleNavigationTest extends TestCase
         $this->actingAs($user)
             ->get(route('operator.dashboard'))
             ->assertOk()
-            ->assertSee('Operator')
+            ->assertSee('Dinas Pendidikan')
             ->assertSee('Daftar Pengajuan')
+            ->assertSee('Daftar Penerima Bantuan')
             ->assertDontSee('Super Admin')
             ->assertDontSee('Master Data')
             ->assertDontSee('Upload Dokumen');

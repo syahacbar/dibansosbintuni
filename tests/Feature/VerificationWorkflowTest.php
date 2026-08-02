@@ -104,6 +104,44 @@ class VerificationWorkflowTest extends TestCase
         $this->assertSame(PengajuanStatus::Ditolak, $rejectPengajuan->fresh()->status);
     }
 
+    public function test_operator_can_mark_approved_pengajuan_as_disalurkan(): void
+    {
+        $operator = User::factory()->create();
+        $pengajuan = $this->createSubmittedPengajuan('PGJ-SALUR');
+        $pengajuan->update(['status' => PengajuanStatus::Disetujui, 'verified_at' => now(), 'verified_by' => $operator->id]);
+
+        $this->actingAs($operator)
+            ->post(route('operator.pengajuan.salurkan', $pengajuan), [
+                'nomor_sp2d' => 'SP2D/2026/001928',
+                'notes' => 'Telah dikirim via Bank Papua',
+            ])
+            ->assertRedirect(route('operator.pengajuan.show', $pengajuan))
+            ->assertSessionHas('success');
+
+        $pengajuan->refresh();
+
+        $this->assertSame(PengajuanStatus::Disalurkan, $pengajuan->status);
+        $this->assertSame('SP2D/2026/001928', $pengajuan->nomor_sp2d);
+        $this->assertNotNull($pengajuan->disalurkan_at);
+        $this->assertDatabaseHas('pengajuan_timelines', [
+            'pengajuan_id' => $pengajuan->id,
+            'status' => PengajuanStatus::Disalurkan->value,
+        ]);
+    }
+
+    public function test_operator_can_view_penerima_list(): void
+    {
+        $operator = User::factory()->create();
+        $approvedPengajuan = $this->createSubmittedPengajuan('PGJ-OK');
+        $approvedPengajuan->update(['status' => PengajuanStatus::Disetujui]);
+
+        $this->actingAs($operator)
+            ->get(route('operator.penerima.index'))
+            ->assertOk()
+            ->assertSee('Daftar Penerima Bantuan Sosial')
+            ->assertSee('PGJ-OK');
+    }
+
     private function createSubmittedPengajuan(string $number = 'PGJ-VERIFY'): Pengajuan
     {
         $user = User::factory()->create();

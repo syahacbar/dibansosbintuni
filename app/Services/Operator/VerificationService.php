@@ -91,6 +91,27 @@ class VerificationService
         return $pengajuan->refresh();
     }
 
+    public function markAsDisalurkan(Pengajuan $pengajuan, User $operator, ?string $nomorSp2d, ?string $notes): Pengajuan
+    {
+        abort_unless($pengajuan->canBeDisalurkan(), 403);
+
+        $pengajuan->update([
+            'status' => PengajuanStatus::Disalurkan,
+            'disalurkan_at' => now(),
+            'nomor_sp2d' => $nomorSp2d,
+            'catatan_penyaluran' => $notes,
+        ]);
+
+        $pengajuan->timelines()->create([
+            'status' => PengajuanStatus::Disalurkan,
+            'label' => 'Bantuan Disalurkan',
+            'description' => ($nomorSp2d ? "No SP2D/Transfer: {$nomorSp2d}. " : '').($notes ?: 'Bantuan sosial pendidikan telah berhasil disalurkan/dicairkan.'),
+            'occurred_at' => now(),
+        ]);
+
+        return $pengajuan->refresh();
+    }
+
     private function autoValidationScore(Pengajuan $pengajuan): int
     {
         $score = 0;

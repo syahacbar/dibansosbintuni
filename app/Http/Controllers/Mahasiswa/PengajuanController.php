@@ -49,13 +49,14 @@ class PengajuanController extends Controller
 
         return view('mahasiswa.pengajuan.show', [
             'pengajuan' => $pengajuan->load(['periodeBansos', 'jenisBantuan', 'timelines']),
+            'missingPrerequisites' => $this->pengajuanService->getMissingPrerequisites($request->user()),
         ]);
     }
 
     public function edit(Request $request, Pengajuan $pengajuan): View
     {
         $this->ensureOwnedByUser($request, $pengajuan);
-        abort_unless($pengajuan->isDraft(), 403);
+        abort_unless($pengajuan->canBeEdited(), 403);
 
         return view('mahasiswa.pengajuan.form', [
             'pengajuan' => $pengajuan,
@@ -69,20 +70,26 @@ class PengajuanController extends Controller
     public function update(PengajuanRequest $request, Pengajuan $pengajuan): RedirectResponse
     {
         $this->ensureOwnedByUser($request, $pengajuan);
-        abort_unless($pengajuan->isDraft(), 403);
+        abort_unless($pengajuan->canBeEdited(), 403);
 
         $this->pengajuanService->updateDraft($pengajuan, $request->validated());
 
         return redirect()
             ->route('mahasiswa.pengajuan.show', $pengajuan)
-            ->with('success', 'Draft pengajuan berhasil diperbarui.');
+            ->with('success', 'Pengajuan berhasil diperbarui.');
     }
 
     public function submit(Request $request, Pengajuan $pengajuan): RedirectResponse
     {
         $this->ensureOwnedByUser($request, $pengajuan);
 
-        $this->pengajuanService->submit($pengajuan);
+        try {
+            $this->pengajuanService->submit($pengajuan);
+        } catch (\InvalidArgumentException $e) {
+            return redirect()
+                ->route('mahasiswa.pengajuan.show', $pengajuan)
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()
             ->route('mahasiswa.pengajuan.show', $pengajuan)

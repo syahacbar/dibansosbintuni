@@ -6,7 +6,7 @@
     <div class="space-y-4">
         <div>
             <h1 class="text-xl font-semibold text-slate-950">Dashboard Monitoring</h1>
-            <p class="mt-1 text-sm text-slate-500">Ringkasan monitoring SIBANSOS Mahasiswa Kabupaten Teluk Bintuni.</p>
+            <p class="mt-1 text-sm text-slate-500">Ringkasan monitoring DIBANSOS BINTUNI (Digitalisasi Bantuan Sosial Pendidikan Kabupaten Teluk Bintuni).</p>
         </div>
 
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

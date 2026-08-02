@@ -38,6 +38,8 @@
                         'Tanggal Submit' => $pengajuan->submitted_at?->format('d/m/Y H:i') ?: '-',
                         'Diverifikasi Oleh' => $pengajuan->verifier?->name ?: '-',
                         'Tanggal Verifikasi' => $pengajuan->verified_at?->format('d/m/Y H:i') ?: '-',
+                        'No. SP2D / Transfer' => $pengajuan->nomor_sp2d ?: '-',
+                        'Tanggal Penyaluran' => $pengajuan->disalurkan_at?->format('d/m/Y H:i') ?: '-',
                     ] as $label => $value)
                         <div>
                             <dt class="text-sm font-medium text-slate-500">{{ $label }}</dt>
@@ -52,6 +54,12 @@
                         <dt class="text-sm font-medium text-slate-500">Catatan Verifikasi</dt>
                         <dd class="mt-1 text-sm text-slate-950">{{ $pengajuan->verification_notes ?: '-' }}</dd>
                     </div>
+                    @if ($pengajuan->catatan_penyaluran)
+                        <div class="md:col-span-2">
+                            <dt class="text-sm font-medium text-slate-500">Catatan Penyaluran</dt>
+                            <dd class="mt-1 text-sm text-slate-950">{{ $pengajuan->catatan_penyaluran }}</dd>
+                        </div>
+                    @endif
                 </dl>
             </section>
 
@@ -59,16 +67,40 @@
                 <h2 class="text-base font-semibold text-slate-950">Timeline Status</h2>
                 <ol class="mt-4 space-y-4">
                     @foreach ($pengajuan->timelines as $timeline)
-                        <li class="relative border-l border-slate-200 pl-4">
-                            <span class="absolute -left-1.5 top-1.5 h-3 w-3 rounded-full {{ $timeline->status->value === 'diajukan' ? 'bg-blue-600' : 'bg-slate-400' }}"></span>
-                            <p class="text-sm font-semibold text-slate-950">{{ $timeline->label }}</p>
-                            <p class="mt-1 text-sm text-slate-600">{{ $timeline->description }}</p>
-                            <p class="mt-1 text-xs text-slate-400">{{ $timeline->occurred_at->format('d/m/Y H:i') }}</p>
+                        <li class="border-l-2 border-slate-300 pl-4">
+                            <p class="text-sm font-semibold text-slate-900">{{ $timeline->label }}</p>
+                            <p class="text-xs text-slate-500">{{ $timeline->description }}</p>
+                            <p class="mt-1 text-xs text-slate-400">{{ $timeline->occurred_at?->format('d/m/Y H:i') }}</p>
                         </li>
                     @endforeach
                 </ol>
             </section>
         </div>
+
+        @if ($pengajuan->canBeDisalurkan())
+            <section class="rounded-lg border border-emerald-200 bg-emerald-50/50 p-6 shadow-sm">
+                <h2 class="text-base font-semibold text-emerald-950">Penyaluran Bantuan Sosial</h2>
+                <p class="mt-1 text-sm text-emerald-700">Pengajuan ini telah disetujui. Silakan masukkan Nomor SP2D / Bukti Transfer saat bantuan disalurkan.</p>
+                <form method="POST" action="{{ route('operator.pengajuan.salurkan', $pengajuan) }}" class="mt-4 space-y-4">
+                    @csrf
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="nomor_sp2d" class="block text-sm font-medium text-slate-700">Nomor SP2D / Transfer Bank</label>
+                            <input type="text" id="nomor_sp2d" name="nomor_sp2d" value="{{ old('nomor_sp2d', $pengajuan->nomor_sp2d) }}" placeholder="Contoh: SP2D/2026/001928" class="mt-1 w-full rounded-md border-slate-300 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
+                        </div>
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-slate-700">Catatan Penyaluran</label>
+                            <input type="text" id="notes" name="notes" value="{{ old('notes', $pengajuan->catatan_penyaluran) }}" placeholder="Catatan tambahan pencairan..." class="mt-1 w-full rounded-md border-slate-300 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800">
+                            Tandai Telah Disalurkan
+                        </button>
+                    </div>
+                </form>
+            </section>
+        @endif
 
         <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
             <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
