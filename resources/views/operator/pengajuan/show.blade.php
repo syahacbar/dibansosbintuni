@@ -173,6 +173,8 @@
                     'NIK' => $profile?->nik,
                     'NIM' => $profile?->nim,
                     'Nama Lengkap' => $profile?->nama_lengkap,
+                    'Jenis Beasiswa' => $profile?->jenis_beasiswa?->label(),
+                    'Jenis Penerima' => $profile?->jenis_penerima?->label(),
                     'No. HP' => $profile?->no_hp,
                     'Program Studi' => $profile?->programStudi?->nama ?: $profile?->program_studi_nama,
                     'Alamat' => $profile?->alamat,

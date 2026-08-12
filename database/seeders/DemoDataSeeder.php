@@ -86,6 +86,8 @@ class DemoDataSeeder extends Seeder
         MahasiswaProfile::updateOrCreate(
             ['user_id' => $mahasiswa->id],
             [
+                'jenis_beasiswa' => 'umum',
+                'jenis_penerima' => 'OAP',
                 'program_studi_id' => $programStudi->id,
                 'distrik_id' => $distrik->id,
                 'kampung_id' => $kampung->id,
@@ -145,6 +147,8 @@ class DemoDataSeeder extends Seeder
         MahasiswaProfile::updateOrCreate(
             ['user_id' => $mahasiswaDua->id],
             [
+                'jenis_beasiswa' => 'kedinasan',
+                'jenis_penerima' => 'OAP',
                 'program_studi_id' => $programStudi->id,
                 'distrik_id' => $distrik->id,
                 'kampung_id' => $kampung->id,

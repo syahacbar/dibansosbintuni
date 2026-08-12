@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Mahasiswa;
 
+use App\Enums\JenisBeasiswa;
+use App\Enums\JenisPenerima;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mahasiswa\ProfileRequest;
 use App\Models\Distrik;
@@ -23,6 +25,8 @@ class ProfileController extends Controller
             'programStudis' => ProgramStudi::with('fakultas.perguruanTinggi')->orderBy('nama')->get(),
             'distriks' => Distrik::orderBy('nama')->get(),
             'kampungs' => Kampung::with('distrik')->orderBy('nama')->get(),
+            'jenisBeasiswas' => JenisBeasiswa::cases(),
+            'jenisPenerimas' => JenisPenerima::cases(),
         ]);
     }
 

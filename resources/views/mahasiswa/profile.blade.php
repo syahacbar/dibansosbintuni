@@ -20,6 +20,34 @@
             @method('PUT')
 
             <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-base font-semibold text-slate-950">Kategori Beasiswa & Penerima</h2>
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label for="jenis_beasiswa" class="block text-sm font-medium text-slate-700">Jenis Beasiswa</label>
+                        <select id="jenis_beasiswa" name="jenis_beasiswa" class="mt-1 w-full rounded-md border-slate-300 text-sm shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                            @foreach ($jenisBeasiswas as $jb)
+                                <option value="{{ $jb->value }}" @selected(old('jenis_beasiswa', $profile->jenis_beasiswa?->value) === $jb->value)>
+                                    {{ $jb->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('jenis_beasiswa')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="jenis_penerima" class="block text-sm font-medium text-slate-700">Jenis Penerima</label>
+                        <select id="jenis_penerima" name="jenis_penerima" class="mt-1 w-full rounded-md border-slate-300 text-sm shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                            @foreach ($jenisPenerimas as $jp)
+                                <option value="{{ $jp->value }}" @selected(old('jenis_penerima', $profile->jenis_penerima?->value) === $jp->value)>
+                                    {{ $jp->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('jenis_penerima')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 class="text-base font-semibold text-slate-950">Biodata</h2>
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
                     <div>

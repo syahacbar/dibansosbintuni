@@ -32,6 +32,8 @@ class MahasiswaProfileTest extends TestCase
 
         $this->actingAs($user)
             ->put(route('mahasiswa.profile.update'), [
+                'jenis_beasiswa' => 'kedinasan',
+                'jenis_penerima' => 'Nusantara',
                 'nik' => '9100000000000001',
                 'nim' => 'MHS001',
                 'nama_lengkap' => 'Mahasiswa Teluk Bintuni',
@@ -52,6 +54,8 @@ class MahasiswaProfileTest extends TestCase
 
         $this->assertDatabaseHas('mahasiswa_profiles', [
             'user_id' => $user->id,
+            'jenis_beasiswa' => 'kedinasan',
+            'jenis_penerima' => 'Nusantara',
             'nik' => '9100000000000001',
             'nim' => 'MHS001',
             'nama_lengkap' => 'Mahasiswa Teluk Bintuni',

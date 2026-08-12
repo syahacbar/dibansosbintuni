@@ -176,6 +176,20 @@
                         </svg>
                     </button>
                 </div>
+
+                <!-- Registration Prompt & Button -->
+                <div class="pt-4 border-t border-slate-800 text-center">
+                    <p class="text-xs text-slate-400 mb-2">Belum memiliki akun mahasiswa?</p>
+                    <a
+                        href="{{ route('register') }}"
+                        class="w-full flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-xs font-extrabold text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/60 transition-all"
+                    >
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v9m-4.5-4.5h9M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                        <span>Daftar Akun Mahasiswa Baru</span>
+                    </a>
+                </div>
             </form>
 
             <!-- Footer Info -->

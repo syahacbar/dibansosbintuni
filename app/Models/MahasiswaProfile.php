@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\JenisBeasiswa;
+use App\Enums\JenisPenerima;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -9,6 +11,8 @@ class MahasiswaProfile extends Model
 {
     protected $fillable = [
         'user_id',
+        'jenis_beasiswa',
+        'jenis_penerima',
         'program_studi_id',
         'distrik_id',
         'kampung_id',
@@ -41,6 +45,8 @@ class MahasiswaProfile extends Model
         return [
             'tanggal_lahir' => 'date',
             'ipk' => 'decimal:2',
+            'jenis_beasiswa' => JenisBeasiswa::class,
+            'jenis_penerima' => JenisPenerima::class,
         ];
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Mahasiswa;
 
+use App\Enums\JenisBeasiswa;
+use App\Enums\JenisPenerima;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,6 +19,8 @@ class ProfileRequest extends FormRequest
         $profileId = $this->user()?->mahasiswaProfile?->id;
 
         return [
+            'jenis_beasiswa' => ['nullable', Rule::enum(JenisBeasiswa::class)],
+            'jenis_penerima' => ['nullable', Rule::enum(JenisPenerima::class)],
             'nik' => ['nullable', 'string', 'max:20', Rule::unique('mahasiswa_profiles', 'nik')->ignore($profileId)],
             'nim' => ['nullable', 'string', 'max:50', Rule::unique('mahasiswa_profiles', 'nim')->ignore($profileId)],
             'nama_lengkap' => ['required', 'string', 'max:255'],
