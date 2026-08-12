@@ -25,7 +25,13 @@ class SystemSettingService
                 Storage::disk('public')->delete($oldLogo);
             }
 
-            $settings['logo_path'] = $logo->store('settings', 'public');
+            $path = $logo->store('settings', 'public');
+            $settings['logo_path'] = $path;
+
+            @mkdir(public_path('images'), 0755, true);
+            @mkdir(public_path('storage/settings'), 0755, true);
+            @copy(storage_path('app/public/'.$path), public_path('images/logo-official-dibansos.png'));
+            @copy(storage_path('app/public/'.$path), public_path('storage/'.$path));
         }
 
         foreach ($settings as $key => $value) {
