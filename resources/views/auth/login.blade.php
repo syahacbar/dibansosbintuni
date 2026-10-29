@@ -7,8 +7,8 @@
 
             <!-- Brand Header -->
             <div class="text-center mb-7">
-                <div class="inline-flex items-center justify-center p-2 mb-3 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                    <x-application-logo class="h-16 w-auto max-w-[260px] object-contain drop-shadow-sm" />
+                <div class="inline-flex items-center justify-center p-3 mb-3 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+                    <x-application-logo class="h-20 w-auto max-w-[180px] object-contain drop-shadow-sm" />
                 </div>
                 <div class="flex items-center justify-center gap-2">
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
@@ -25,60 +25,6 @@
 
             <!-- Session Status Alert -->
             <x-auth-session-status class="mb-6" :status="session('status')" />
-
-            <!-- Interactive Quick Demo Accounts Hub Component -->
-            <div
-                class="mb-7 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50 to-emerald-50/20 p-5 shadow-sm"
-                x-data="{
-                    activeAccount: null,
-                    accounts: [
-                        { role: 'Super Admin', email: 'admin@example.com', badge: 'Super Admin', desc: 'Akses Penuh, User, Role & Setting' },
-                        { role: 'Operator Dinas', email: 'operator@example.com', badge: 'Dinas Pendidikan', desc: 'Verifikasi Berkas & Penyaluran SP2D' },
-                        { role: 'Mahasiswa', email: 'mahasiswa@example.com', badge: 'Mahasiswa', desc: 'Upload Dokumen & Pengajuan Bansos' },
-                    ],
-                    useAccount(email, role) {
-                        document.getElementById('email').value = email;
-                        document.getElementById('password').value = 'password';
-                        this.activeAccount = role;
-                    },
-                }"
-            >
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-600 animate-ping"></span>
-                        <h2 class="text-xs font-extrabold uppercase tracking-wider text-emerald-900">Pilih Akun Demo Uji Coba</h2>
-                    </div>
-                    <span class="text-[10px] font-bold text-slate-500">Password: <code class="text-emerald-700 bg-white px-2 py-0.5 rounded border border-slate-200 font-mono shadow-2xs">password</code></span>
-                </div>
-
-                <div class="space-y-2">
-                    <template x-for="account in accounts" :key="account.email">
-                        <button
-                            type="button"
-                            class="w-full text-left rounded-xl border p-3 transition-all flex items-center justify-between gap-3 group"
-                            :class="activeAccount === account.role ? 'border-emerald-600 bg-emerald-600 text-white shadow-md' : 'border-slate-200/90 bg-white hover:border-emerald-400 hover:bg-emerald-50/50 text-slate-800'"
-                            x-on:click="useAccount(account.email, account.role)"
-                        >
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-extrabold transition-colors" :class="activeAccount === account.role ? 'text-white' : 'text-slate-900 group-hover:text-emerald-700'" x-text="account.role"></span>
-                                    <template x-if="activeAccount === account.role">
-                                        <span class="text-[9px] font-extrabold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">TERPILIH</span>
-                                    </template>
-                                </div>
-                                <p class="text-[11px] truncate mt-0.5" :class="activeAccount === account.role ? 'text-emerald-100' : 'text-slate-500'" x-text="account.email"></p>
-                            </div>
-
-                            <span
-                                class="shrink-0 rounded-lg px-3 py-1.5 text-[11px] font-extrabold transition-all"
-                                :class="activeAccount === account.role ? 'bg-white text-emerald-800 shadow-xs' : 'bg-emerald-100 text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white'"
-                            >
-                                Gunakan Akun
-                            </span>
-                        </button>
-                    </template>
-                </div>
-            </div>
 
             <!-- Login Form -->
             <form method="POST" action="{{ route('login') }}" class="space-y-5" x-data="{ showPassword: false }">

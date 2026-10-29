@@ -20,11 +20,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
-            $sourceLogo = 'C:\\Users\\Ara\\.gemini\\antigravity-ide\\brain\\60c9d9ff-df11-4e80-8727-902ae3923707\\media__1786557113691.png';
+            $sourceLogo = public_path('images/logo-official-dibansos.png');
             if (file_exists($sourceLogo)) {
                 $targets = [
                     storage_path('app/public/settings/logo-official-dibansos.png'),
-                    public_path('images/logo-official-dibansos.png'),
                     public_path('storage/settings/logo-official-dibansos.png'),
                 ];
 
@@ -32,10 +31,12 @@ class AppServiceProvider extends ServiceProvider
                     if (! file_exists(dirname($destPath))) {
                         @mkdir(dirname($destPath), 0755, true);
                     }
-                    @copy($sourceLogo, $destPath);
+                    if (! file_exists($destPath)) {
+                        @copy($sourceLogo, $destPath);
+                    }
                 }
 
-                \App\Models\SystemSetting::updateOrCreate(
+                \App\Models\SystemSetting::firstOrCreate(
                     ['key' => 'logo_path'],
                     ['value' => 'settings/logo-official-dibansos.png']
                 );
